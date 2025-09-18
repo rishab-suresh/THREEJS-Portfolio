@@ -36,7 +36,7 @@ function useDrops(count: number) {
 
 export default function RainbowWalls() {
   const fieldRef = useRef<HTMLDivElement>(null)
-  const drops = useDrops(70)
+  const drops = useDrops(90)
   const animsRef = useRef<gsap.core.Tween[]>([])
 
   useEffect(() => {
@@ -106,11 +106,12 @@ export default function RainbowWalls() {
           style={{
             top: `-10vh`,
             left: `${d.xPct}%`,
-            width: `${d.width}px`,
-            height: `${d.heightVh}vh`,
+            width: `${Math.max(6, d.width)}px`,
+            height: `${Math.max(14, d.heightVh)}vh`,
             transform: 'translateX(-50%)',
-            background: `linear-gradient(180deg, rgba(255,255,255,0.12) 0%, ${d.color} 25%, ${d.color} 85%, rgba(0,0,0,0) 100%)`,
-            opacity: 1,
+            background: `linear-gradient(180deg, rgba(255,255,255,0.18) 0%, ${d.color} 20%, ${d.color} 88%, rgba(0,0,0,0) 100%)`,
+            boxShadow: `0 0 18px ${d.color}55, 0 0 36px ${d.color}33`,
+            opacity: 0.95,
           }}
         />
       ))}

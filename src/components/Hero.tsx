@@ -31,6 +31,7 @@ export default function Hero() {
           transformOrigin: 'center',
           duration: 0.6,
           ease: 'power3.out',
+          overwrite: true,
         })
         items.forEach((el) => {
           const depth = Number(el.dataset.depth || 24)
@@ -39,6 +40,7 @@ export default function Hero() {
             y: -ny * depth,
             duration: 0.6,
             ease: 'power3.out',
+            overwrite: true,
           })
         })
       }

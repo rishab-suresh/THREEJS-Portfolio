@@ -1,7 +1,6 @@
 import { useEffect } from 'react'
 import './App.css'
 import { initSmoothScroll } from './lib/smoothScroll'
-import BootOverlay from './components/BootOverlay'
 import Hero from './components/Hero'
 import Sections from './components/Sections'
 import Cursor from './components/Cursor'
@@ -14,7 +13,6 @@ function App() {
 
   return (
     <div>
-      <BootOverlay />
       <Cursor />
       <Hero />
       <Sections />
