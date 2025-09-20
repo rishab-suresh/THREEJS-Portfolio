@@ -152,13 +152,10 @@ export default function Projects() {
     const cleanups: Array<() => void> = []
     cards.forEach((card) => {
       const haze = card.querySelector<HTMLElement>('.project-haze')
-      const titleEl = card.querySelector<HTMLElement>('.project-title')
       function onMove(e: MouseEvent) {
         const rect = card.getBoundingClientRect()
         const nx = (e.clientX - rect.left) / rect.width - 0.5 // -0.5..0.5
         const ny = (e.clientY - rect.top) / rect.height - 0.5
-        const mag = Math.min(1, Math.hypot(nx, ny) * 2)
-        const split = 1 + mag * 3 // 1..4 px
         gsap.to(card, {
           rotationY: nx * 8,
           rotationX: -ny * 8,
@@ -170,14 +167,10 @@ export default function Projects() {
         if (haze) {
           gsap.to(haze, { x: nx * 22, y: ny * 22, duration: 0.4, ease: 'power3.out' })
         }
-        if (titleEl) {
-          titleEl.style.textShadow = `${-split}px 0 0 rgba(255,0,0,0.55), ${split}px 0 0 rgba(0,180,255,0.55)`
-        }
       }
       function onLeave() {
         gsap.to(card, { rotationX: 0, rotationY: 0, duration: 0.6, ease: 'power3.out' })
         if (haze) gsap.to(haze, { x: 0, y: 0, duration: 0.6, ease: 'power3.out' })
-        if (titleEl) titleEl.style.textShadow = 'none'
       }
       card.addEventListener('mousemove', onMove)
       card.addEventListener('mouseleave', onLeave)
@@ -219,7 +212,6 @@ export default function Projects() {
                 className="project-card"
                 target="_blank"
                 rel="noreferrer"
-                style={{ background: 'transparent', backdropFilter: 'none' }}
               >
                 <div className="project-haze" aria-hidden />
                 <div className="project-drip" />

@@ -66,16 +66,16 @@ function KaleidoMesh({ hue = 200 }: { hue?: number }) {
       a = abs(a - (3.14159/seg));
       float n = noise(vec2(a*2.0, r*2.0 - u_time*0.2));
       float m = noise(vec2(a*4.0 + u_time*0.1, r*3.0));
-      // Pink + White palette
-      float huePink = 0.92; // ~330 degrees
-      float sat = 0.55 + 0.15*n;
-      float light = 0.72 + 0.18*sin(r*6.0 - u_time*0.6) + 0.06*m;
-      vec3 pink = hsl2rgb(vec3(huePink, sat, light));
-      // Blend toward white to keep readability
-      float whiteMix = 0.78 + 0.10*n; // brighter white bias
-      vec3 col = mix(vec3(1.0), pink, whiteMix);
+      // Blue-tinted palette using provided hue
+      float hueBase = u_hue; // 0..1
+      float sat = 0.65 + 0.15*n;
+      float light = 0.60 + 0.18*sin(r*6.0 - u_time*0.6) + 0.06*m;
+      vec3 tint = hsl2rgb(vec3(hueBase, sat, light));
+      // Mix slightly toward white so content over it stays legible
+      float whiteMix = 0.25 + 0.10*n;
+      vec3 col = mix(vec3(1.0), tint, 0.80);
       col = clamp(col, 0.0, 1.0);
-      gl_FragColor = vec4(col, 0.82);
+      gl_FragColor = vec4(col, 0.60);
     }
   `
 

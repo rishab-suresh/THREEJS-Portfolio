@@ -84,16 +84,16 @@ function JuliaBG() {
       return mix(a, b, u.x) + (c - a)*u.y*(1.0 - u.x) + (d - b)*u.x*u.y;
     }
 
-    // Color palette (pink/white), darker bias
+    // Blue palette for dark theme
     vec3 hsl2rgb(vec3 c){
       vec3 p = abs(fract(c.xxx + vec3(0., 2./3., 1./3.)) * 6. - 3.);
       vec3 rgb = c.z + c.y * (clamp(p - 1., 0., 1.) - 0.5);
       return rgb;
     }
     vec3 palette(float t){
-      float huePink = 0.92; // ~330 deg
-      vec3 pink = hsl2rgb(vec3(huePink, 0.65, 0.55));
-      return mix(vec3(1.0), pink, clamp(t, 0.0, 1.0));
+      float hueBlue = 0.58; // ~210 deg
+      vec3 blue = hsl2rgb(vec3(hueBlue, 0.80, 0.55)); // higher sat
+      return mix(vec3(1.0), blue, clamp(t*1.2, 0.0, 1.0));
     }
 
     void main(){
@@ -137,11 +137,12 @@ function JuliaBG() {
       float sm = iter - log2(log2(dot(z,z))) + 2.0;
       float t = clamp(sm / maxIter, 0.0, 1.0);
 
-      // Map to pink/white with subtle band smoothing (darker bias)
-      vec3 col = palette(pow(t, 0.65));
-      // Add gentle radial lightening for readability
-      col = mix(vec3(1.0), col, 0.35 + 0.18*exp(-r*1.5));
-      col *= 0.9;
+      // Map to blue with subtle band smoothing
+      vec3 col = palette(pow(t, 0.60));
+      // Keep mostly blue; add a touch of white toward the center for readability
+      float whiteBlend = 0.12 + 0.12*exp(-r*1.5);
+      col = mix(col, vec3(1.0), whiteBlend);
+      col *= 0.95;
       gl_FragColor = vec4(col, u_opacity);
     }
   `

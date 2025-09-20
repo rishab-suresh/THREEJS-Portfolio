@@ -22,16 +22,19 @@ export default function LavaTitle({ text }: Props) {
       const dx = (i % 2 === 0 ? 1 : -1) * (28 + (i * 9) % 36)
       const dy = (i % 3 === 0 ? -1 : 1) * (24 + (i * 7) % 32)
       const r = parseFloat(b.getAttribute('r') || '40')
-      timelines.push(gsap.to(b, { attr: { cx: ox + dx, cy: oy + dy }, duration: 8 + (i % 5), repeat: -1, yoyo: true, ease: 'sine.inOut' }))
-      timelines.push(gsap.to(b, { attr: { r: r * (i % 2 ? 1.12 : 0.88) }, duration: 6 + (i % 3), repeat: -1, yoyo: true, ease: 'sine.inOut' }))
+      timelines.push(gsap.to(b, { attr: { cx: ox + dx, cy: oy + dy }, duration: 12 + (i % 5), repeat: -1, yoyo: true, ease: 'sine.inOut' }))
+      timelines.push(gsap.to(b, { attr: { r: r * (i % 2 ? 1.12 : 0.88) }, duration: 10 + (i % 3), repeat: -1, yoyo: true, ease: 'sine.inOut' }))
     })
 
-    // Slow vertical drift for the whole blob group
+    // Slow vertical drift for the whole blob group (original behavior)
     const drift = gsap.to(group, { y: -14, duration: 10, repeat: -1, yoyo: true, ease: 'sine.inOut' })
+    // Subtle horizontal bob so it feels lava-like but not sweeping across letters
+    const driftX = gsap.to(group, { x: 20, duration: 16, repeat: -1, yoyo: true, ease: 'sine.inOut' })
 
     return () => {
       timelines.forEach((t) => t.kill())
       drift.kill()
+      driftX.kill()
     }
   }, [])
 
@@ -40,7 +43,7 @@ export default function LavaTitle({ text }: Props) {
       <defs>
         {/* Goo filter */}
         <filter id="goo" x="-50%" y="-50%" width="200%" height="200%">
-          <feGaussianBlur in="SourceGraphic" stdDeviation="10" result="blur" />
+          <feGaussianBlur in="SourceGraphic" stdDeviation="12" result="blur" />
           <feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 20 -10" result="goo" />
           <feBlend in="SourceGraphic" in2="goo" />
         </filter>
@@ -54,7 +57,7 @@ export default function LavaTitle({ text }: Props) {
         </mask>
       </defs>
 
-      {/* Solid pink underlay is the page background; we only render the masked lava group */}
+      {/* Reapply mask so the lava only shows inside the text */}
       <g ref={groupRef} filter="url(#goo)" mask="url(#text-mask)">
         <rect x="0" y="0" width="1200" height="300" fill="transparent" />
         {/* Blobs inside the text */}

@@ -37,9 +37,9 @@ export default function Sections() {
       <About />
       <Projects />
       <section className="section section-work">
-        <KaleidoBG />
+        <KaleidoBG hue={210} />
         <div className="container">
-          <h2 className="reveal">Work</h2>
+          <h2 className="reveal">About Me</h2>
           <div className="reveal work-bio">
             <p>
               Piano enthusiast, football player, and an avid Pokémon fan (Gen 4 and below). I love finding
@@ -66,7 +66,7 @@ export default function Sections() {
             </p>
 
             <p>
-              I&apos;ve traveled to around 40 countries, learning different perspectives and cultures. Branching out into
+              I&apos;ve traveled around 25 countries, learning different perspectives and cultures. Branching out into
               different fields and areas of expertise has made me very open to trying new things.
             </p>
           </div>

@@ -18,10 +18,11 @@ export default function About() {
 
   return (
     <section id="about" className="section section-about">
-      <Particles hue={active.hue} />
+      {/* Force brighter cyan for particles on dark bg */}
+      <Particles hue={195} />
       <div className="container about">
         <div className="about-col">
-          <h2>About</h2>
+          <h2>Principles</h2>
           <Typewriter className="about-bio" text="Creative engineer focused on motion, web, and expressive UI." speed={18} />
           <div className="vibes">
             <div className="vibe-tags">
@@ -117,15 +118,16 @@ function Particles({ hue = 200 }: { hue?: number }) {
     }
 
     function init() {
-      const count = Math.max(120, Math.floor((width * height) / 9000))
+      // Fewer, faster particles
+      const count = Math.max(70, Math.floor((width * height) / 16000))
       particles = new Array(count).fill(0).map(() => {
         const floater = Math.random() < 0.12
         return {
           x: Math.random() * width,
           y: Math.random() * height,
-          vx: (Math.random() - 0.5) * 0.3,
-          vy: 0.35 + Math.random() * 0.6,
-          r: floater ? 2.2 + Math.random() * 1.8 : 0.9 + Math.random() * 1.8,
+          vx: (Math.random() - 0.5) * 0.6, // faster lateral movement
+          vy: 0.8 + Math.random() * 0.9,   // faster downward drift
+          r: floater ? 2.0 + Math.random() * 1.6 : 0.8 + Math.random() * 1.6,
           floater,
         }
       })
@@ -134,7 +136,10 @@ function Particles({ hue = 200 }: { hue?: number }) {
     function step() {
       ctx.clearRect(0, 0, width, height)
       ctx.globalCompositeOperation = 'source-over'
-      ctx.fillStyle = '#000'
+      // Bright cyan particles for dark background
+      ctx.fillStyle = '#00eaff'
+      ctx.shadowColor = 'rgba(0,234,255,0.6)'
+      ctx.shadowBlur = 6
       for (let p of particles) {
         // Mouse influence
         const dx = p.x - mouse.current.x
@@ -149,8 +154,8 @@ function Particles({ hue = 200 }: { hue?: number }) {
         // Integrate
         p.x += p.vx
         p.y += p.vy
-        p.vx *= 0.985
-        p.vy = p.vy * 0.985 + 0.002
+        p.vx *= 0.978
+        p.vy = p.vy * 0.978 + 0.004 // slightly stronger gravity
 
         // Wrap
         if (p.y > height + 20) { p.y = -10; p.x = Math.random() * width }
@@ -187,13 +192,15 @@ function Particles({ hue = 200 }: { hue?: number }) {
           const b = neighbors[n].p
           const d = Math.sqrt(neighbors[n].d2)
           const alpha = Math.max(0, 0.18 - (d / maxDist) * 0.18)
-          ctx.strokeStyle = `hsla(${hueRef.current}, 80%, 45%, ${alpha})`
+          ctx.strokeStyle = `rgba(0,234,255,${alpha})`
           ctx.beginPath()
           ctx.moveTo(a.x, a.y)
           ctx.lineTo(b.x, b.y)
           ctx.stroke()
         }
       }
+      // Reset shadow to avoid leaking into future draws if needed elsewhere
+      ctx.shadowBlur = 0
       raf = requestAnimationFrame(step)
     }
 

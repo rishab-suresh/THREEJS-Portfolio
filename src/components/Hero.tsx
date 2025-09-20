@@ -2,7 +2,7 @@ import { useLayoutEffect, useRef } from 'react'
 import gsap from 'gsap'
 import ScrollTrigger from 'gsap/ScrollTrigger'
 import LavaTitle from './LavaTitle'
-import RainbowWalls from './RainbowWalls'
+import HeroParticles from './HeroParticles'
 // import { Link } from 'react-router-dom'
 
 export default function Hero() {
@@ -77,7 +77,7 @@ export default function Hero() {
 
   return (
     <section ref={rootRef} className="section hero">
-      <RainbowWalls />
+      <HeroParticles />
       <div className="rainbow-fade" />
       <div ref={stageRef} className="container hero-stage" style={{ pointerEvents: 'auto' }}>
         <div className="hero-row">
